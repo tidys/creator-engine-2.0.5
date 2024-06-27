@@ -1,6 +1,6 @@
 {
   "name": "creator-engine-2.0.5",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "cocos2d-js.js",
   "typings": "creator.d.ts",
