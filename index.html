@@ -1,1 +1,62 @@
-<html><body><script src="./cocos2d-js.js"></script></html>
+<html style="width: 100%; height: 100%; margin: 0; padding: 0">
+  <body style="width: 100%; height: 100%; margin: 0; padding: 0">
+    <script src="./cocos2d-js.js"></script>
+    <div style="width: 100%; height: 100%; margin: 0; padding: 0" id="cocos"></div>
+    <script>
+      function loadScript(url, callback) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.onload = function () {
+          if (typeof callback === "function") {
+            callback();
+          }
+        };
+        script.src = url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+      }
+      //   loadScript("./cocos2d-js.js", () => {
+      //   });
+      const cocos = document.getElementById("cocos");
+      cc.game.run(
+        {
+          id: cocos,
+          showFPS: false,
+          frameRate: 60,
+        },
+        () => {
+          cc.view.resizeWithBrowserSize(true);
+          let width = cocos.clientWidth;
+          let height = cocos.clientHeight;
+          let scene = new cc.Scene("scene");
+          let canvasNode = new cc.Node("Canvas");
+          canvasNode.x = 0;
+          canvasNode.y = 0;
+          canvasNode.width = width;
+          canvasNode.height = height;
+          const canvas = canvasNode.addComponent(cc.Canvas);
+          scene.addChild(canvasNode);
+          cc.director.runSceneImmediate(scene);
+          cc.Camera.main.backgroundColor = new cc.Color().fromHEX("#88888888");
+
+          let particleNode = new cc.Node("particle");
+          const particleSystem = particleNode.addComponent(cc.ParticleSystem);
+          particleNode.on("particle-finished", () => {
+            console.log("particle-finished");
+            particleSystem.resetSystem();
+          });
+          particleSystem.custom = false;
+          canvasNode.addChild(particleNode);
+          const file = "./boom";
+          cc.loader.load(`${file}.png`, (e, texture) => {
+            const frame = new cc.SpriteFrame(texture);
+            particleSystem.spriteFrame = frame;
+            cc.loader.load(`${file}.plist`, (e, plist) => {
+              particleSystem._plistFile = "";
+              particleSystem._initWithDictionary(plist);
+            });
+          });
+        }
+      );
+    </script>
+  </body>
+</html>

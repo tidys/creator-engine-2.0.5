@@ -45780,6 +45780,9 @@
         false;
         this.disableRender();
         this.autoRemoveOnFinish && this._stopped && this.node.destroy();
+        if (this.node && this.node.isValid) {
+          this.node.emit("particle-finished");
+        }
       }
     });
     cc.ParticleSystem = module.exports = ParticleSystem;
